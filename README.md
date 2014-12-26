@@ -12,3 +12,7 @@ And don't forget to create table by excute db.sql included in this project.
 Demo
 ---------------------
 You can try and play demo in http://itpcc.net/project/cover_gen/
+Demo
+---------------------
+### Demo background photo ###
+Thanks for awesome background photo by Mr.Teeraphat Sonsang (You can check out his more awesome photo at https://www.facebook.com/teeraphat.sonsang ;) )
