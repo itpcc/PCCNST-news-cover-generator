@@ -11,4 +11,4 @@ And don't forget to create table by excute db.sql included in this project.
 
 Demo
 ---------------------
-You can try and play demo in [url]http://itpcc.net/project/cover_gen/[/url]
+You can try and play demo in http://itpcc.net/project/cover_gen/
