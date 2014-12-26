@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="us">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Example Page</title>
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/bootstrap-theme.min.css" rel="stylesheet">
+	<link href="css/ui-lightness/jquery-ui-1.10.4.css" rel="stylesheet">
+	<link href="css/chosen.min.css" rel="stylesheet">
+	<style type="text/css">
+		html, body{
+			min-height: 450px;
+			min-width: 900px;
+		}
+		/* CSS3 switch checkbox */
+		.onoffswitch {
+			position: relative; /*width: 90px;*/width: 100%;
+			-webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+		}
+		.onoffswitch-checkbox {
+			display: none;
+		}
+		.onoffswitch-label {
+			display: block; overflow: hidden; cursor: pointer;
+			border: 2px solid #666666; border-radius: 30px;
+		}
+		.onoffswitch-inner {
+			display: block; width: 200%; margin-left: -100%;
+			-moz-transition: margin 0.3s ease-in 0s; -webkit-transition: margin 0.3s ease-in 0s;
+			-o-transition: margin 0.3s ease-in 0s; transition: margin 0.3s ease-in 0s;
+		}
+		.onoffswitch-inner:before, .onoffswitch-inner:after {
+			display: block; float: left; width: 50%; height: 30px; padding: 0; line-height: 30px;
+			font-size: 16px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+			-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+			border-radius: 30px;
+			box-shadow: 0px 15px 0px rgba(0,0,0,0.08) inset;
+		}
+		.onoffswitch-inner:before {
+			content: "ON";
+			padding-left: 15px;
+			background-color: #6BB2ED; color: #FFFFFF;
+			border-radius: 30px 0 0 30px;
+		}
+		.onoffswitch-inner:after {
+			content: "OFF";
+			padding-right: 15px;
+			background-color: #FFFFFF; color: #666666;
+			text-align: right;
+			border-radius: 0 30px 30px 0;
+		}
+		.onoffswitch-switch {
+			display: block; width: 30px; margin: 0px;
+			background: #FFFFFF;
+			border: 2px solid #666666; border-radius: 30px;
+			position: absolute; top: 0; bottom: 0; /*right: 60px;*/right: calc(100% - 30px);
+			-moz-transition: all 0.3s ease-in 0s; -webkit-transition: all 0.3s ease-in 0s;
+			-o-transition: all 0.3s ease-in 0s; transition: all 0.3s ease-in 0s; 
+			background-image: -moz-linear-gradient(center top, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 80%); 
+			background-image: -webkit-linear-gradient(center top, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 80%); 
+			background-image: -o-linear-gradient(center top, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 80%); 
+			background-image: linear-gradient(center top, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 80%);
+			box-shadow: 0 1px 1px white inset;
+		}
+		.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+			margin-left: 0;
+		}
+		.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+			right: 0px; 
+		}
+
+		#preview{
+			width: 800px;
+			height: 400px;
+			background-image: url("./template/IMG_0720-2.JPG");
+			background-size: cover;
+			background-repeat: no-repeat;
+			overflow: hidden;
+		}
+		#result{
+			width: 800px;
+			padding: 0;
+		}
+		#preview-label, #result-label{
+			font-family: 'CmPrasanmit','THSarabunPSK', sans-serif;
+			width: 20%;
+			font-size: 1.2em;
+			color: white;
+			background-color: rgba(0,0,0,0.65);
+			position: absolute;
+			top: 0; 
+		}
+		#preview-label{ left: 0; }
+		#result-label{ right: 0; }
+		#preview .ui-draggable{
+			border: solid 1px #00F;
+		}
+		#school-logo{
+			background-image: url("./assets/PCCNST_Logo_border.png");
+			background-size: contain;
+			background-repeat: no-repeat;
+			width: 141px;
+			height: 200px;
+			left: 25px;
+			top: 70px;
+		}
+		#headline{
+			color: #1e2166;
+			font-family: 'ThaiSans Neue','LillyUPC','THSarabunPSK', sans-serif;
+			font-weight: bolder;
+			font-size: 80px;
+			line-height: 1;
+			-webkit-font-smoothing:antialiased;
+			-moz-osx-font-smoothing: grayscale;
+			width: 600px;
+			top: 50px;
+			left: 200px;
+			white-space:nowrap;
+		}
+		#description{
+			color: #1e2166;
+			font-family: 'CmPrasanmit','THSarabunPSK', sans-serif;
+			font-weight: bolder;
+			font-size: 40px;
+			line-height: 1;
+			-webkit-font-smoothing:antialiased;
+			-moz-osx-font-smoothing: grayscale;
+			width: 600px;
+			top: 150px;
+			left: 200px;
+			white-space:nowrap;
+		}
+		#credit{
+			color: #cb4d03;
+
+			font-family: 'CmPrasanmit','THSarabunPSK', sans-serif;
+			font-weight: bold;
+			font-size: 20px;
+			line-height: 1;
+			text-align: right;
+			-webkit-font-smoothing:antialiased;
+			-moz-osx-font-smoothing: grayscale;
+			width: 780px;
+			position: absolute;
+			bottom: 10px;
+			left: 0;
+			white-space:nowrap;
+		}
+		#descriptionFontFamily{
+			width: 100%;
+		}
+		#descriptionFontFamily_chosen{
+			font-size: 1.2em;
+		}
+		@media screen and (-webkit-min-device-pixel-ratio: 0) {
+		  #headline {
+		    /*text-shadow: none;
+		    -webkit-text-stroke: 5px white;*/
+		  }
+		}
+	</style>
+</head>
+<body>
+	<div class="container-ดสีรก">
+		<div class="row">
+			<div class="center-block" style="max-width: 1600px;">
+				<div class="col-md-6" id="preview">
+					<div id="preview-label">ภาพตัวอย่าง</div>
+					<div id="school-logo"> </div>
+					<div id="headline" style="position:absolute;">พิมพ์ข้อความในช่องครับ</div>
+					<div id="description" style="position:absolute;">พิมพ์ข้อความในช่องครับ</div>
+					<div id="credit">จัดทำสไลด์โดย<span id="slideCreator">นายราชศักดิ์ รักษ์กำเนิด</span> ภาพพื้นหลังโดย<span id="photographer"></span></div>
+				</div>
+				<div class="col-md-6" id="result">
+					<div id="result-label">ภาพตัวอย่าง</div>
+					<canvas width="800" height="400" id="canvas-result"></canvas>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<form role="form" id="cover-config">
+			<div class="row">			
+				<fieldset class="col-md-6">
+					<legend>หัวเรื่อง</legend>
+					<div class="form-group">
+						<label for="headlineText">ข้อความหัวเรื่อง (พิมพ์ \n เพื่อขึ้นบรรทัดใหม่)</label>
+						<input type="text" class="form-control" id="headlineText" placeholder="พิมพ์ข้อความที่ต้องการ" value="สวัสดี">
+					</div>
+					<div class="form-group">
+						<label for="headlineFontSize">ขนาดอักษร : <span id="headlineFontSizeValue">80</span></label>
+						<div id="headlineFontSize"></div>
+					</div>
+					<div class="form-group">
+						<label for="headlineLineHeight">ระยะห่างระหว่างบรรทัด : <span id="headlineLineHeightValue">1</span></label>
+						<div id="headlineLineHeight"></div>
+					</div>
+				</fieldset>
+				<fieldset class="col-md-6">
+					<legend>คำอธิบาย</legend>
+					<div class="form-group">
+						<label for="descriptionText">ข้อความคำอธิบาย (พิมพ์ \n เพื่อขึ้นบรรทัดใหม่)</label>
+						<input type="text" class="form-control" id="descriptionText" placeholder="พิมพ์ข้อความที่ต้องการ" value="สวัสดีครับผม">
+					</div>
+					<div class="form-group">
+						<label for="descriptionFontSize">ขนาดอักษร : <span id="descriptionFontSizeValue">40</span></label>
+						<div id="descriptionFontSize"></div>
+					</div>
+					<div class="form-group">
+						<label for="descriptionLineHeight">ระยะห่างระหว่างบรรทัด : <span id="descriptionLineHeightValue">1</span></label>
+						<div id="descriptionLineHeight"></div>
+					</div>
+					<div class="form-group">
+						<label for="descriptionFontFamily">แบบอักษรคำอธิบาย : </label>
+						<select id="descriptionFontFamily" class="chosen-select form-control">
+							<option style="font-family: 'THSarabunPSK';">THSarabunPSK</option>
+							<option style="font-family: 'TH Sarabun New';">TH Sarabun New</option>
+							<option style="font-family: 'CmPrasanmit';">CmPrasanmit</option>
+							<option style="font-family: 'ThaiSans Neue';">ThaiSans Neue</option>
+							<option style="font-family: 'LilyUPC';">LilyUPC</option>
+							<option style="font-family: 'FreesiaUPC';">FreesiaUPC</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="descriptionMathStroke"> ใช้การคำนวนทางคณิตศาสตร์แทนการสร้างขอบอักษรแบบ Native (ขอบจะมน แต่อักษรจะหยาบกว่า)</label>
+						<div class="onoffswitch">
+							<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="descriptionMathStroke" checked>
+							<label class="onoffswitch-label" for="descriptionMathStroke">
+								<span class="onoffswitch-inner"></span>
+								<span class="onoffswitch-switch"></span>
+							</label>
+						</div>
+					</div>
+				</fieldset>
+				<fieldset class="col-md-12">
+					<legend>เครดิต</legend>
+					<div class="form-group">
+						<label for="slideCreatorText">ผู้ทำสไลด์</label>
+						<input type="text" class="form-control" id="slideCreatorText" placeholder="พิมพ์ข้อความที่ต้องการ" value="นายราชศักดิ์ รักษ์กำเนิด">
+					</div>
+					<div class="form-group">
+						<label for="photographerText">ที่มาภาพถ่าย</label>
+						<input type="text" class="form-control" id="photographerText" placeholder="พิมพ์ข้อความที่ต้องการ" value="นายราชศักดิ์ รักษ์กำเนิด">
+					</div>
+					<div class="form-group">
+						<label for="creditFontSize">ขนาดอักษร : <span id="creditFontSizeValue">20</span></label>
+						<div id="creditFontSize"></div>
+					</div>
+					<div class="form-group">
+						<label for="descriptionFontFamily">แบบอักษรเครดิต : </label>
+						<select id="descriptionFontFamily" class="chosen-select form-control">
+							<option style="font-family: 'THSarabunPSK';">THSarabunPSK</option>
+							<option style="font-family: 'TH Sarabun New';">TH Sarabun New</option>
+							<option style="font-family: 'CmPrasanmit';">CmPrasanmit</option>
+							<option style="font-family: 'ThaiSans Neue';">ThaiSans Neue</option>
+							<option style="font-family: 'LilyUPC';">LilyUPC</option>
+							<option style="font-family: 'FreesiaUPC';">FreesiaUPC</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="creditMathStroke"> ใช้การคำนวนทางคณิตศาสตร์แทนการสร้างขอบอักษรแบบ Native (ขอบจะมน แต่อักษรจะหยาบกว่า)</label>
+						<div class="onoffswitch">
+							<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="creditMathStroke" checked>
+							<label class="onoffswitch-label" for="creditMathStroke">
+								<span class="onoffswitch-inner"></span>
+								<span class="onoffswitch-switch"></span>
+							</label>
+						</div>
+					</div>
+				</fieldset>
+			</div>
+			<div class="row">
+				<div class="center-block col-md-3">
+					<button type="submit" class="btn btn-primary btn-lg" id="submitDraw">ส่งออก</button> 
+					<button type="button" class="btn btn-primary btn-lg canvassaver" id="saveCanvas">บันทึกภาพ</button>
+				</div>
+			</div>
+		</form>
+	</div>
+	<script src="js/jquery-1.10.2.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/jquery-ui-1.10.4.js"></script>
+	<script src="js/chosen.jquery.min.js"></script>
+	<script src="js/jquery-textstroke.js"></script>
+	<script type="text/javascript" src="js/canvassaver.js"></script>
+	<script type="text/javascript">
+	var canvas, ctx, canvasSaveObj, pos, logoImg, headlineImg, headlineImgWidth, headlineImgHeight, headlineCoverHeight, headlineCoverWidth, headlineLineHeight = 1, headlineColor, descriptionLineHeight = 1, descriptionColor, creditColor, textX, textY, textSize, textMsg;
+	function strokeTextCanvas(text, colorStroke, r, stX, stY, haveShadow, shadowColor){
+		var steps = 48;
+		if(haveShadow){
+			ctx.shadowColor = shadowColor;
+			ctx.fillText(text, stX+(r/2), stY+(r/2));
+		}
+		ctx.shadowColor = "rgba(0,0,0,0)";
+		ctx.fillStyle = colorStroke;
+		for (var t=0;t<=(2*Math.PI);t+=(2*Math.PI)/steps){
+			var x = r*Math.cos(t);
+			var y = r*Math.sin(t);
+			x = (Math.abs(x) < 1e-6) ? 0 : x;
+			y = (Math.abs(y) < 1e-6) ? 0 : y;
+			ctx.fillText(text, stX+x, stY+y);
+		}
+	}
+	$(function() {
+		/* <canvas> */
+		canvas = $('#canvas-result')[0];
+		ctx = canvas.getContext('2d');
+		canvasSaveObj = new CanvasSaver('./saveImg.php');
+		/** splash screen **/
+		var grd=ctx.createLinearGradient(0,0,0,400);
+		grd.addColorStop(0,"rgba(30,87,153,1)");
+		grd.addColorStop(0.50,"rgba(41,137,216,1)");
+		grd.addColorStop(0.51,"rgba(32,124,202,1)");
+		grd.addColorStop(1,"rgba(125,185,232,1)");
+		ctx.fillStyle=grd;
+		ctx.fillRect(0,0,800,400);
+		textX = 20; textY = 60;
+		ctx.shadowColor = "black"; ctx.shadowOffsetX = 3; ctx.shadowOffsetY = 3; ctx.shadowBlur = 0;
+		ctx.fillStyle = "white";
+		ctx.font = "bolder 40px 'ThaiSans Neue'";
+		ctx.fillText("ระบบสร้างสไลด์ด้วย canvas สำหรับเว็บไซต์ Version 0.1 alpha", textX, textY);
+		textY += 10;
+		ctx.beginPath();
+		ctx.moveTo(textX,textY);
+		ctx.lineTo(790,textY);
+		ctx.strokeStyle = "white";
+		ctx.lineWidth = 6;
+		ctx.stroke();
+		textY += 18+15;
+		ctx.font = "bold 30px 'CmPrasanmit'";
+		ctx.fillText("วิธีการใช้งาน", textX, textY);
+		ctx.shadowColor = "transparent";
+		ctx.font = "normal 25px 'CmPrasanmit'";
+		textY += 30; ctx.fillText("ภาพด้านซ้ายสำหรับการแก้ไข เช่นลาก/ขยายขนาด กล่องขวา(กล่องนี้)จะเป็นภาพจริง", textX, textY);
+		textY += 30; ctx.fillText("1. เลือกรูปภาพจาก select box ตามต้องการ", textX, textY);
+		textY += 30; ctx.fillText("2. แก้ไขข้อมูลให้เป็นไปตามต้องการจากกล่องด้านล่าง", textX, textY);
+		textY += 30; ctx.fillText("3. ลากกล่องข้อความ (กล่องที่เลื่อนได้จะมีกรอบสีน้ำเงินกำกับ) ไปยังตำแหน่งที่ต้องการ", textX, textY);
+		textY += 30; ctx.fillText("4. หากต้องการย่อโลโก้ สามารถยืดขยายได้ที่มุมล่างขวาของโลโก้ (ระบบจะรักษาสัดส่วนโลโก้ให้อัตโนมัติ)", textX, textY);
+		textY += 30; ctx.fillText("5. เมื่อปรับจนพอใจแล้ว ให้กดปุ่ม \"ส่งออก\" หรือ enter ที่ช่องแก้ไขข้อความเพื่อดูภาพที่ได้จริง", textX, textY);
+		textY += 30; ctx.fillText("6. เมื่อได้ดังต้องการแล้ว ให้กด \"บันทึก\" หรือ \"ส่งขึ้น server\" จะมีป๊อปอัพขึ้นมา ให้ใส่ข้อมูลลงไปตามที่ระบบ", textX, textY);
+		textY += 30; ctx.fillText("   ร้องขอ แล้วกด \"ยืนยัน!\" เพื่อบันทึกภาพหรือส่งเข้า server พร้อมสำหรับเขียนบทความ", textX, textY);
+		ctx.shadowColor = "black"; ctx.shadowOffsetX = 2; ctx.shadowOffsetY = 2;
+		ctx.font = "bold 40px 'CmPrasanmit'";
+		textY += 40; ctx.fillText("Made with \u2665 by Rachasak Ragkamnerd.", textX, textY);
+		textX += 625; textY -= 10;
+		ctx.shadowColor = "transparent";
+		ctx.font = "bold 20px 'CmPrasanmit'"; 
+		ctx.fillText(" CC     BY:", textX, textY);
+		ctx.font = "bold 40px 'CmPrasanmit'"; 
+		ctx.fillText("        $", textX+5, textY+2);
+		ctx.beginPath();
+		ctx.arc(textX+15,textY-5,20,0,2*Math.PI);
+		ctx.strokeStyle = "white";
+		ctx.lineWidth = 3;
+		ctx.stroke();
+		ctx.beginPath();
+		ctx.arc(textX+65,textY-5,20,0,2*Math.PI);
+		ctx.strokeStyle = "white";
+		ctx.lineWidth = 3;
+		ctx.stroke();
+		ctx.beginPath();
+		ctx.arc(textX+110,textY-5,20,0,2*Math.PI);
+		ctx.strokeStyle = "white";
+		ctx.lineWidth = 3;
+		ctx.stroke();
+		ctx.beginPath();
+		ctx.moveTo(textX+95,textY-18);
+		ctx.lineTo(textX+128,textY+5);
+		ctx.strokeStyle = "white";
+		ctx.lineWidth = 3;
+		ctx.stroke();
+		/* </canvas> */
+		$("#school-logo").draggable({ containment: "#preview" }).resizable({
+			aspectRatio: 484/700
+		});
+		/* <headline> */
+		$("#headline").draggable({
+			drag: function(event, ui){
+				ui.helper.width(ui.helper.parent().width() - ui.position.left);
+			}
+		});
+		$("#headline").textStroke(5, "#FFF", "8px 8px 7px rgba(0,0,0,0.5)");
+		$("#headlineText").keyup(function(){
+			$("#headline").html($(this).val().replace(/\\n/g, "<br>"));
+		});
+		$("#headlineFontSize").slider({ 
+			min: 25,
+			max: 150,
+			value: 80,
+			slide: function(event, ui){
+				$("#headline").css("font-size", ui.value);
+				$("#headlineFontSizeValue").text(ui.value);
+			}
+		});
+		$("#headlineLineHeight").slider({ 
+			min: 25,
+			max: 200,
+			value: 100,
+			slide: function(event, ui){
+				$("#headline").css("line-height", ui.value/100);
+				$("#headlineLineHeightValue").text(ui.value/100);
+				headlineLineHeight = ui.value/100;
+			}
+		});
+		/* </headline> */
+		/* <description> */
+		$("#description").draggable({
+			drag: function(event, ui){
+				ui.helper.width(ui.helper.parent().width() - ui.position.left);
+			}
+		});
+		$("#description").textStroke(3, "#FFF", "4px 4px 3px rgba(0,0,0,0.5)");
+		$("#descriptionText").keyup(function(){
+			$("#description").html($(this).val().replace(/\\n/g, "<br>"));
+		});
+		$("#descriptionFontSize").slider({ 
+			min: 12,
+			max: 80,
+			value: 40,
+			slide: function(event, ui){
+				$("#description").css("font-size", ui.value);
+				$("#descriptionFontSizeValue").text(ui.value);
+			}
+		});
+		$("#descriptionLineHeight").slider({ 
+			min: 25,
+			max: 200,
+			value: 100,
+			slide: function(event, ui){
+				$("#description").css("line-height", ui.value/100);
+				$("#descriptionLineHeightValue").text(ui.value/100);
+				descriptionLineHeight = ui.value/100;
+			}
+		});
+		$("#descriptionFontFamily").chosen();
+		$('#descriptionFontFamily').on('change chosen:ready', function(evt, params) {
+			$("#descriptionFontFamily_chosen .chosen-single, #description").css("font-family", $(this).val());
+		});
+		/* </description> */
+		/* <credit> */
+		/*$("#credit").draggable({
+			drag: function(event, ui){
+				ui.helper.width(ui.helper.parent().width() - ui.position.left);
+			}
+		});*/
+		$("#credit").textStroke(2, "#FFF", "4px 4px 3px rgba(0,0,0,0.5), 0px 0px 20px rgba(255, 255, 153, 1)");
+		$("#slideCreatorText").keyup(function(){
+			$("#slideCreator").html($(this).val());
+		});
+		$("#photographerText").keyup(function(){
+			$("#photographer").html($(this).val());
+		});
+		$("#creditFontSize").slider({ 
+			min: 12,
+			max: 45,
+			value: 20,
+			slide: function(event, ui){
+				$("#credit").css("font-size", ui.value);
+				$("#creditFontSizeValue").text(ui.value);
+			}
+		});
+		$("#creditFontFamily").chosen();
+		$('#creditFontFamily').on('change chosen:ready', function(evt, params) {
+			$("#creditFontFamily_chosen .chosen-single, #credit").css("font-family", $(this).val());
+		});
+		/* </credit> */
+		$("#cover-config").submit(function(e){
+			e.preventDefault();
+			/*set text same*/
+			$("#headline").html($("#headlineText").val().replace(/\\n/g, "<br>"));
+			$("#description").html($("#descriptionText").val().replace(/\\n/g, "<br>"));
+			$("#slideCreator").html($("#slideCreatorText").val());
+			$("#photographer").html($("#photographerText").val());
+			/* background*/
+			headlineImg = new Image();
+			headlineImg.src = $("#preview").css('background-image').replace('url(','').replace(')','');
+			/* logo 1/2 */
+			logoImg = new Image();
+			logoImg.src = $("#school-logo").css('background-image').replace('url(','').replace(')','');
+
+			ctx.clearRect (0,0,800,400);
+			ctx.fillText("กำลังโหลดภาพ", 0, 0);
+			headlineImg.onload = function(){
+				logoImg.onload = function(){
+					ctx.textAlign="start";
+					ctx.clearRect (0,0,800,400);
+					headlineImgHeight = headlineImg.height;
+					headlineImgWidth = headlineImg.width;
+					if((headlineImgHeight*2) > headlineImgHeight){
+						headlineCoverWidth = headlineImgWidth;
+						headlineCoverHeight = parseInt(headlineImgWidth/2);
+					} else{
+						headlineCoverWidth = parseInt(headlineImgHeight/2);
+						headlineCoverHeight = headlineImgHeight;
+					}
+					ctx.drawImage(headlineImg,0,0,headlineCoverWidth,headlineCoverHeight,0,0,800,400);
+					/* logo 2/2 */
+					pos = $("#school-logo").position();
+					ctx.drawImage(logoImg,0,0,logoImg.width,logoImg.height,pos.left,pos.top,$("#school-logo").width(),$("#school-logo").height());
+					/* headline text*/
+					headlineColor = $("#headline").css("color");
+					ctx.font = "bolder "+$("#headline").css("font-size")+' "ThaiSans Neue"';
+					ctx.strokeStyle = 'white';
+					ctx.lineWidth=10;
+					ctx.fillStyle = headlineColor;
+					pos = $("#headline").position();
+					textSize = parseInt($("#headline").css("font-size"));
+					textX = parseInt(pos.left); textY = parseInt(pos.top+(textSize*0.85));
+					text = $("#headlineText").val();
+					$.each(text.split("\\n"), function(i, lineText){
+						ctx.shadowOffsetX = 4;
+						ctx.shadowOffsetY = 4;
+						ctx.shadowBlur = 4;
+						ctx.shadowColor = "rgba(0,0,0,0.5)";
+						ctx.strokeText(lineText.trim(), textX, textY);
+
+						ctx.shadowOffsetX = 0;
+						ctx.shadowOffsetY = 0;
+						ctx.shadowBlur = 1;
+						ctx.shadowColor = headlineColor.replace(")", ", 0.1)");
+						ctx.fillText(lineText.trim(), textX, textY);
+						textY += parseInt(textSize * headlineLineHeight);
+					});
+					/* description text*/
+					descriptionColor = $("#description").css("color");
+					ctx.font = "bolder "+$("#description").css("font-size")+' '+$("#description").css("font-family");
+
+					pos = $("#description").position();
+					textSize = parseInt($("#description").css("font-size"));
+					textX = parseInt(pos.left); textY = parseInt(pos.top+(textSize*0.85));
+					text = $("#descriptionText").val();
+					ctx.strokeStyle = 'white';
+					ctx.lineWidth=6;
+					$.each(text.split("\\n"), function(i, lineText){
+						ctx.shadowColor = "rgba(0,0,0,0.5)";
+						ctx.shadowBlur = 4;
+						ctx.shadowOffsetX = 4;
+						ctx.shadowOffsetY = 4;
+						if($("#descriptionMathStroke").is(':checked')){
+							strokeTextCanvas(lineText.trim(), 'white', 3, textX, textY, true, "rgba(0,0,0,0.8)"); //fill real border
+						}
+						else{							
+							ctx.strokeText(lineText.trim(), textX, textY);
+						}
+						ctx.fillStyle = descriptionColor;
+						ctx.shadowOffsetX = 0;
+						ctx.shadowOffsetY = 0;
+						ctx.shadowBlur = 1;
+						ctx.shadowColor = descriptionColor.replace(")", ", 0.1)");
+						ctx.fillText(lineText.trim(), textX, textY);
+						textY += parseInt(textSize * descriptionLineHeight);
+					});
+					/* credit text*/
+					ctx.textAlign="end";
+					creditColor = $("#credit").css("color");
+					ctx.font = "bolder "+$("#credit").css("font-size")+' '+$("#credit").css("font-family");
+
+					pos = $("#credit").position();
+					textSize = parseInt($("#credit").css("font-size"));
+					textX = 780; textY = 400 - (textSize*0.75);
+					text = $("#credit").text();
+					ctx.strokeStyle = 'white';
+					ctx.lineWidth = 6;
+					ctx.shadowColor = "rgba(0,0,0,0.5)";
+					ctx.shadowBlur = 2;
+					ctx.shadowOffsetX = 2;
+					ctx.shadowOffsetY = 2;
+					if($("#creditMathStroke").is(':checked')){
+						strokeTextCanvas(text.trim(), 'white', 3, textX, textY, true, "rgba(0,0,0,0.8)"); //fill real border
+					}
+					else{							
+						ctx.strokeText(text.trim(), textX, textY);
+					}
+					ctx.fillStyle = creditColor;
+					ctx.shadowOffsetX = 0;
+					ctx.shadowOffsetY = 0;
+					ctx.shadowBlur = 1;
+					ctx.shadowColor = creditColor.replace(")", ", 0.1)");
+					ctx.fillText(text.trim(), textX, textY);
+				};
+			};
+		});
+		$("#saveCanvas").click(function(e){
+			e.preventDefault();
+
+		});
+			
+	});
+	</script>
+</body>
+</html>
+<!-- http://proto.io/freebies/onoff/ -->
